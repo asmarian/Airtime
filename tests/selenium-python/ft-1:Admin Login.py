@@ -26,12 +26,7 @@ class Ft1AdminLogin(unittest.TestCase):
         current_user = driver.find_element_by_class_name("name")
         self.assertEqual(current_user.text, 'admin')
 
-
-
-
         driver.find_element_by_link_text("Logout").click()
-
-
     
     def tearDown(self):
         self.driver.quit()
