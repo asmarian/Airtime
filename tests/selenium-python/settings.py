@@ -9,8 +9,8 @@ DB_PORT = "5432"
 
 #users informations
 
-ADMIN_LOGIN = "admin"
-ADMIN_PASS = "admin"
+ADMIN_LOGIN = "test"
+ADMIN_PASS = "test"
 
 PHONE = "1234567890"
 
@@ -38,12 +38,21 @@ TADMIN_NAME = "testadmin_name"
 TADMIN_LASTNAME = "testadmin_lastname"
 TADMIN_EMAIL = "testadmin@email.com"
 
-#url of airtime
-BASIC_URL = "http://localhost/"
-UPLOAD_MP3 = "/home/nareg/Downloads/recit.mp3"
+
+
+#url of airtime and things that must be changed
+BASIC_URL = "https://admin.rakuten.fm/basket/login"
+UPLOAD_MP3 = "/home/nareg/Music/recit.mp3"
 MP3_NAME = "recit"
 MP3_NAMEW = "recit.mp3"
 
+TIME_ZONE = "America/Toronto"
 
-SHOW_NAME = "Nareg"
+SHOW_NAME = "testing"
+SHOW_LENGTH = 4
+HOUR_SHOW = 1
+AD_NAME_60 = "60 Second Ad Break"
+AD_CREATOR_60 = "ADWTAG_60000"
+
+
 

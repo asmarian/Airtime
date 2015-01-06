@@ -1,7 +1,9 @@
 __author__ = 'nareg'
 
-import unittest, time, re, sys, psycopg2, datetime
+import unittest, re, sys, psycopg2, time
 from settings import *
+from datetime import datetime, date, timedelta
+import time
 
 # function for finding a match in a list of words
 def find_word(text, search):
@@ -86,21 +88,32 @@ def instance_show(show_id):
     return show_id
 
 
-def my_date_time():
-    localtime = time.localtime()
-    d = datetime.datetime.now()
-    minutes = d.minute + 2
-    start_time = str(d.hour) + ":" + str(minutes)
-    start_date = time.strftime("%Y-%m-%d", localtime)
-    # timer = time.strftime("%H:%M", localtime)
-    return start_date, start_time
-
-
 def month_name_year():
+
     full_month = time.strftime("%B")
     day_of_month = time.strftime("%Y")
     dates = full_month + " " + day_of_month
     return dates
+
+def time_stamper():
+    d = datetime.now()
+    stamped_time = str(d.hour)  + str(d.minute)
+    return str(stamped_time)
+
+#this function add minutes to current time and hour to the current time to setup schedule
+def setup_time(length):
+    end_hour_from_now = datetime.now() + timedelta(hours=length)
+    start_minutes_from_now = datetime.now() + timedelta(minutes=3)
+
+    end_time = format(end_hour_from_now, '%H:%M')
+    start_time = format(start_minutes_from_now, '%H:%M' )
+    return start_time, end_time
+
+def add_time(length):
+    end_hour_from_now = datetime.now()+ timedelta(hours=length)
+    end_time = format(end_hour_from_now, '%H:%M')
+    return end_time
+
 
 
 

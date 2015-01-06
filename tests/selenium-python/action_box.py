@@ -6,12 +6,16 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest, time, re, sys, psycopg2
+import unittest, re, sys, psycopg2
 import selenium.webdriver.common.alert
 from settings import UPLOAD_MP3
 from funtion_box import *
-from datetime import datetime
 from selenium import webdriver
+from datetime import date, datetime, time, timedelta
+from time import sleep
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 
@@ -41,10 +45,10 @@ def login(self, username, password):
     driver.find_element_by_id("submit").click()
 
 
-def change_time_zone(self):
+def change_time_zone(self, timezone):
     driver = self.driver
     driver.find_element_by_id("current-user").click()
-    driver.find_element_by_css_selector("option[value=\"America/Toronto\"]").click()
+    driver.find_element_by_css_selector("option[value=\"%s\"]" % timezone).click()
     driver.find_element_by_id("cu_save_user").click()
 
 
@@ -56,21 +60,11 @@ def add_file(self, filename):
 def upload_file(self, file_location, filename):
     driver = self.driver
     driver.find_element_by_css_selector("input[type=\"file\"]").send_keys(file_location)
-    time.sleep(5)
+    self.driver.implicitly_wait(2)
     driver.find_element_by_link_text("Start upload").click()
-    time.sleep(5)
-    trackid = get_track_id(filename)
-    return trackid
-
-
-def my_date_time():
-    d = datetime.datetime.now()
-    hour = d.hour
-    minutes = d.minute + 2
-    ingre = str(d.hour) + ":" + str(minutes)
-    localtime = time.localtime()
-    timstr = time.strftime("%Y-%m-%d", localtime)
-    return timstr, ingre
+    self.driver.implicitly_wait(2)
+    # trackid = get_track_id(filename)
+    #return trackid
 
 
 def go_to_folder(self, foldername):
@@ -109,10 +103,9 @@ def create_guest(self):
     type = driver.find_element_by_id("type")
     guest = driver.find_element_by_id("user-type-G").click()
     ActionChains(driver).move_to_element(type).double_click(guest)
-    time.sleep(3)
-    save = driver.find_element_by_id("save_user")
+    self.driver.implicitly_wait(2)
+    save = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "save_user")))
     ActionChains(driver).double_click(save).perform()
-    time.sleep(3)
 
 
 def create_dj(self):
@@ -134,10 +127,10 @@ def create_dj(self):
     type = driver.find_element_by_id("type")
     guest = driver.find_element_by_id("user-type-H").click()
     ActionChains(driver).move_to_element(type).double_click(guest)
-    time.sleep(3)
+    self.driver.implicitly_wait(5)
     save = driver.find_element_by_id("save_user")
     ActionChains(driver).double_click(save).perform()
-    time.sleep(3)
+    self.driver.implicitly_wait(5)
 
 
 def create_pr(self):
@@ -159,10 +152,10 @@ def create_pr(self):
     type = driver.find_element_by_id("type")
     guest = driver.find_element_by_id("user-type-P").click()
     ActionChains(driver).move_to_element(type).double_click(guest)
-    time.sleep(3)
+    self.driver.implicitly_wait(2)
     save = driver.find_element_by_id("save_user")
     ActionChains(driver).double_click(save).perform()
-    time.sleep(3)
+    self.driver.implicitly_wait(2)
 
 
 def create_admin(self):
@@ -184,45 +177,140 @@ def create_admin(self):
     type = driver.find_element_by_id("type")
     guest = driver.find_element_by_id("user-type-A").click()
     ActionChains(driver).move_to_element(type).double_click(guest)
-    time.sleep(3)
+    driver.implicitly_wait(2)
     save = driver.find_element_by_id("save_user")
     ActionChains(driver).double_click(save).perform()
-    time.sleep(3)
+    self.driver.implicitly_wait(2)
 
 
-def create_show(self, show_name):
+def create_show(self, show_name, show_start, show_end, repeat, link):
     driver = self.driver
     go_to_folder(self, "CALENDAR")
-    driver.find_element_by_class_name("add-button").click()
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME,"add-button"))).click()
     driver.find_element_by_id("add_show_name").clear()
     driver.find_element_by_id("add_show_name").send_keys(tr_word(show_name))
     driver.find_element_by_xpath("//div[@id='schedule-add-show']/h3[2]/span").click()
     # date, hour = my_date_time()
     driver.find_element_by_id("add_show_start_time").clear()
-    driver.find_element_by_id("add_show_start_time").send_keys("22:00")
+    driver.find_element_by_id("add_show_start_time").send_keys(show_start)
     driver.find_element_by_id("add_show_end_time").clear()
-    driver.find_element_by_id("add_show_end_time").send_keys("23:00")
+    driver.find_element_by_id("add_show_end_time").send_keys(show_end)
+    sleep(5)
+    if repeat == "repeat":
+        driver.find_element_by_id("add_show_repeats").click()
+    if link == "link":
+        driver.find_element_by_id("add_show_linked").click()
+    driver.find_element_by_class_name("ui-button-text").click()
+    driver.refresh()
+
+
+def add_content_to_show_with_name(self, name, mp3name):
+    driver = self.driver
+    item1 = driver.find_element_by_xpath( "//span[@class='fc-event-title' and text()='%s']" % name)
+    ActionChains(driver).click(item1).perform()
+    sleep(5)
+    driver.find_element_by_class_name( "icon-add-remove-content").click()
+    media = driver.find_element_by_xpath("//td[@class='library_title' and text()='%s']" % mp3name)
+    sleep(5)
+    ActionChains(driver).double_click(media).perform()
+
+    item2 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[@class='btn' and text()='Ok']")))
+    ActionChains(driver).click(item2).perform()
+
+
+def show_menu(self, show_name, action):
+    driver = self.driver
+    if action == "delete_instance":
+        item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+        ActionChains(driver).click(item).perform()
+        header = driver.find_element_by_class_name("icon-delete").click()
+        sleep(2)
+        driver.find_element_by_xpath( "//li[contains(@class,'icon-delete')]//span[.='Delete This Instance']").click()
+
+
+    elif action == "delete_instances":
+        item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+        ActionChains(driver).click(item).perform()
+        header = driver.find_element_by_class_name("icon-delete").click()
+        sleep(2)
+        driver.find_element_by_xpath( "//li[contains(@class,'icon-delete')]//span[.='Delete This Instance and All Following']").click()
+
+    elif action == "icon-overview":
+        item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+        ActionChains(driver).click(item).perform()
+        driver.find_element_by_class_name('%s' % action).click()
+
+    elif action == "icon-delete":
+        item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+        ActionChains(driver).click(item).perform()
+        header = driver.find_element_by_class_name("icon-delete").click()
+
+    elif action == "edit_instance":
+        item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+        ActionChains(driver).click(item).perform()
+        header = driver.find_element_by_class_name("icon-edit").click()
+        sleep(2)
+        driver.find_element_by_xpath( "//li[contains(@class,'icon-edit')]//span[.='Edit This Instance']").click()
+
+
+
+def library_menu(self, title, action):
+    driver = self.driver
+    item = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//td[@class='library_title' and text()='%s']" % title )))
+    ActionChains(driver).click(item).perform()
+    driver.find_element_by_class_name('%s' % action).click()
+
+def library_content(self, title):
+    driver = self.driver
+    find = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//td[@class='library_title' and text()='%s']" % title)))
+    parent = find.find_element_by_xpath('..')
+    return parent.text
+
+
+def check_users_info(self):
+    driver = self.driver
+    username = driver.find_element_by_id("cu_login")
+    username_value = username.get_attribute("value")
+    first_name = driver.find_element_by_id("cu_first_name")
+    first_name_value = first_name.get_attribute("value")
+    last_name = driver.find_element_by_id("cu_last_name")
+    last_name_value = last_name.get_attribute("value")
+    email = driver.find_element_by_id("cu_email")
+    email_value = email.get_attribute("value")
+    language = driver.find_element_by_xpath("//option[@selected='selected']")
+    timezone = driver.find_element_by_xpath("//option[@selected='selected']")
+    return username_value, first_name_value, last_name_value, email_value, language.text, timezone.text
+
+
+def edit_meta_title(self, filename, stamp, creator, album):
+    driver = self.driver
+    library_menu(self, filename, "icon-edit")
+    sleep(2)
+    driver.find_element_by_name("track_title").clear()
+    driver.find_element_by_name("track_title").send_keys(stamp)
+    driver.find_element_by_name("artist_name").clear()
+    driver.find_element_by_name("artist_name").send_keys(creator)
+    driver.find_element_by_name("album_title").clear()
+    driver.find_element_by_name("album_title").send_keys(album)
+    driver.find_element_by_id("editmdsave").click()
+
+def edit_show(self, show_end):
+    #this function is to edit show length for now
+    driver = self.driver
+    sleep(5)
+    driver.find_element_by_xpath("//div[@id='schedule-add-show']/h3[2]").click()
+
+    sleep(5)
+    driver.find_element_by_id("add_show_end_time").clear()
+    driver.find_element_by_id("add_show_end_time").send_keys(show_end)
+    sleep(5)
     driver.find_element_by_class_name("ui-button-text").click()
 
-
-def add_content_to_show(self, show_id, media_id):
-    driver = self.driver
-    go_to_folder(self, "CALENDAR")
-    driver.find_element_by_xpath("//div[@data-show-id='%s']" % show_id).click()
-    driver.find_element_by_class_name("icon-add-remove-content").click()
-    time.sleep(5)
-    media = driver.find_element_by_id(utilize_id(media_id))
-    ActionChains(driver).double_click(media).perform()
-    driver.find_element_by_class_name("ui-dialog-buttonset").click()
+    driver.refresh()
 
 
-def check_existence_by_id(self, path):
-    driver = self.driver
-    try:
-        driver.find_element_by_id(path)
-    except NoSuchElementException:
-        return False
-    return True
+
+
 
 
 
