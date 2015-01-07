@@ -7,7 +7,7 @@ DB_PASS = "airtime"
 DB_HOST = "127.0.0.1"
 DB_PORT = "5432"
 
-#users informations
+# users informations
 
 ADMIN_LOGIN = "test"
 ADMIN_PASS = "test"
