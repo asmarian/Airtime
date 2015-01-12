@@ -47,25 +47,27 @@ class TestSuperAdminActions(unittest.TestCase):
         driver.find_element_by_class_name("name").click()
         sleep(5)
         username_value, first_name_value, last_name_value, email_value, language, timezone = check_users_info(self)
+        sleep(5)
         self.assertEqual(username_value, ADMIN_LOGIN)
         # check for the rest of the info
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_add_media_present(self):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("ADD MEDIA")).click()
+        sleep(5)
         source = driver.page_source
-        sleep(2)
         self.assertTrue(tr_word("Add files to the upload queue and click the start button.") in source)
         self.assertTrue(tr_word("Drag files here.") in source)
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_library_present(self):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("LIBRARY")).click()
+        sleep(5)
         source = driver.page_source
-        sleep(2)
+
         self.assertTrue(tr_word("Advanced Search Options") in source)
         # self.assertTrue(tr_word("Open Media Builder") in source)
         self.assertTrue(tr_word("Show / hide columns") in source)
@@ -75,9 +77,8 @@ class TestSuperAdminActions(unittest.TestCase):
         driver = self.driver
         dates = month_name_year()
         driver.find_element_by_link_text(tr_word("CALENDAR")).click()
+        sleep(5)
         source = driver.page_source
-        sleep(2)
-        print dates
         self.assertTrue(tr_word("%s" % dates) in source)
         self.assertTrue(
             driver.find_element_by_xpath("//span[@class='fc-button-content' and text()='%s']" % tr_word("month")))
@@ -86,18 +87,18 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(
             driver.find_element_by_xpath("//span[@class='fc-button-content' and text()='%s']" % tr_word("day")))
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_dropsystem_present(self):
         driver = self.driver
         m1 = driver.find_element_by_link_text(tr_word("SYSTEM"))
-        sleep(2)
+        self.driver.implicitly_wait(10)
         self.assertEqual(m1.text, tr_word('SYSTEM'))
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_drophelp_present(self):
         driver = self.driver
         m1 = driver.find_element_by_link_text(tr_word("HISTORY"))
-        sleep(2)
+        sleep(5)
         self.assertEqual(m1.text, tr_word('HISTORY'))
 
     #@unittest.skip("skip this one")
@@ -105,10 +106,10 @@ class TestSuperAdminActions(unittest.TestCase):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("NOW PLAYING")).click()
         source = driver.page_source
-        sleep(2)
+        sleep(5)
         self.assertTrue(tr_word("Show / hide columns") in source)
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_addMP3_file(self):
         driver = self.driver
         driver.refresh()
@@ -123,7 +124,7 @@ class TestSuperAdminActions(unittest.TestCase):
         handle_alert(self)
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_startMP3_upload_delete(self):
         driver = self.driver
         driver.refresh()
@@ -139,7 +140,7 @@ class TestSuperAdminActions(unittest.TestCase):
         # self.assertTrue(find_word(library_content.text, MP3_NAME), "MP3 name not present in Library")
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_startMP3_upload_edit_title(self):
         driver = self.driver
         # driver.refresh()
@@ -161,7 +162,7 @@ class TestSuperAdminActions(unittest.TestCase):
         #self.assertTrue(find_word(library_content.text, MP3_NAME), "MP3 name not present in Library")
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_create_Admin_logout_login_delete(self):
         driver = self.driver
         driver.refresh()
@@ -198,7 +199,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(TADMIN_LOGIN)))
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_create_DJ_delete(self):
         driver = self.driver
         go_to_subfolder(self, "SYSTEM", "Users")
@@ -211,13 +212,13 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(find_word(users.text, tr_word("DJ")))
         one = driver.find_element_by_xpath("//td[@class='' and text()='%s']/..//span[@class='ui-icon ui-icon-closethick']" % tr_word(DJ_LOGIN)).click()
         ActionChains(driver).double_click(one).perform()
-        sleep(2)
+        sleep(5)
         driver.refresh()
         after_deletion = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "users_datatable")))
         self.assertFalse(find_word(after_deletion.text, tr_word(DJ_LOGIN)))
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_create_Guest_delete(self):
         driver = self.driver
         driver.refresh()
@@ -240,7 +241,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(GUEST_LOGIN)))
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_create_PR_delete(self):
         driver = self.driver
         driver.refresh()
@@ -263,7 +264,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(PR_LOGIN)))
 
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_add_content_to_hour_show_delete_show(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
@@ -287,7 +288,7 @@ class TestSuperAdminActions(unittest.TestCase):
         sleep(2)
         show_menu(self, stamped_show_name, "icon-delete")
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_add_content_to_hour_linked_show_delete_show(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
@@ -311,7 +312,7 @@ class TestSuperAdminActions(unittest.TestCase):
         show_menu(self, stamped_show_name, "delete_instances")
 
     #@unittest.skip("skip this one")
-    def test_create_longer_show_test_correct_number_of_ads(self):
+    def test_longer_show_test_correct_number_of_ads(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
         go_to_folder(self, tr_word("ADD MEDIA"))
@@ -333,7 +334,7 @@ class TestSuperAdminActions(unittest.TestCase):
         sleep(2)
         show_menu(self, stamped_show_name, "icon-delete")
 
-    @unittest.skip("skip this one")
+    #@unittest.skip("skip this one")
     def test_create_linked_show_check_number_of_ads_in_instance(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
@@ -371,6 +372,7 @@ class TestSuperAdminActions(unittest.TestCase):
         # check to see if the right number of ads were added to x length of show
         content1 = driver.find_elements_by_xpath("//td[text()='%s']" % AD_CREATOR_60)
         self.assertEqual(SHOW_LENGTH, len(content1))
+        driver.find_element_by_xpath("//button[@class='btn' and text()='Ok']").click()
         show_menu(self, stamped_show_name, "delete_instances")
 
 
