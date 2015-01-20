@@ -104,7 +104,7 @@ def time_stamper():
 # this function add minutes to current time and hour to the current time to setup schedule
 def setup_time(length):
     end_hour_from_now = datetime.now() + timedelta(hours=length)
-    start_minutes_from_now = datetime.now() + timedelta(minutes=3)
+    start_minutes_from_now = datetime.now() + timedelta(minutes=7)
 
     end_time = format(end_hour_from_now, '%H:%M')
     start_time = format(start_minutes_from_now, '%H:%M')

@@ -59,8 +59,9 @@ def add_file(self, filename):
 
 def upload_file(self, file_location, filename):
     driver = self.driver
-    #driver.find_element_by_css_selector("input[type=\"file\"]").send_keys(file_location)
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[type=\"file\"]"))).send_keys(file_location)
+    # driver.find_element_by_css_selector("input[type=\"file\"]").send_keys(file_location)
+    WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "input[type=\"file\"]"))).send_keys(file_location)
     self.driver.implicitly_wait(2)
     driver.find_element_by_link_text("Start upload").click()
     self.driver.implicitly_wait(2)
@@ -259,21 +260,42 @@ def show_menu(self, show_name, action):
         header = driver.find_element_by_class_name("icon-edit").click()
         sleep(2)
         driver.find_element_by_xpath("//li[contains(@class,'icon-edit')]//span[.='Edit This Instance']").click()
+    elif action == "already-deleted":
+        try:
+            #WebDriverWait(driver, 10).until(
+            #EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
+            driven = driver.find_element_by_xpath("//span[@class='fc-event-title' and text()='%s']" % show_name)
+        except:
+            return False
+
+        else:
+            return True
 
 
 def library_menu(self, title, action):
     driver = self.driver
-    item = driver.find_element_by_xpath("//td[@class='library_title' and text()='%s']" % title)
-    ActionChains(driver).click(item).perform()
-    driver.find_element_by_class_name('%s' % action).click()
+    if action == "icon-delete":
+        item = driver.find_element_by_xpath("//td[@class='library_title' and text()='%s']" % title)
+        ActionChains(driver).click(item).perform()
+        driver.find_element_by_class_name('%s' % action).click()
+        alert = driver.switch_to.alert
+        alert.accept()
+    else:
+        item = driver.find_element_by_xpath("//td[@class='library_title' and text()='%s']" % title)
+        ActionChains(driver).click(item).perform()
+        driver.find_element_by_class_name('%s' % action).click()
 
 
 def library_content(self, title):
     driver = self.driver
-    find = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.XPATH, "//td[@class='library_title' and text()='%s']" % title)))
-    parent = find.find_element_by_xpath('..')
-    return parent.text
+    try:
+        find = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "//td[@class='library_title' and text()='%s']" % title)))
+        parent = find.find_element_by_xpath('..')
+    except:
+        return False
+    else:
+       return parent.text
 
 
 def check_users_info(self):
@@ -315,6 +337,12 @@ def edit_show(self, show_end):
     sleep(5)
     driver.find_element_by_class_name("ui-button-text").click()
     driver.refresh()
+
+
+def delete_track(self, stamp):
+    driver = self.driver
+    go_to_folder(self, tr_word("LIBRARY"))
+    library_menu(self, stamp, "icon-delete")
 
 
 
