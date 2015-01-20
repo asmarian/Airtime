@@ -228,7 +228,7 @@ def show_menu(self, show_name, action):
             EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
         ActionChains(driver).click(item).perform()
         header = driver.find_element_by_class_name("icon-delete").click()
-        sleep(2)
+        sleep(5)
         driver.find_element_by_xpath("//li[contains(@class,'icon-delete')]//span[.='Delete This Instance']").click()
 
 
@@ -237,7 +237,7 @@ def show_menu(self, show_name, action):
             EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
         ActionChains(driver).click(item).perform()
         header = driver.find_element_by_class_name("icon-delete").click()
-        sleep(2)
+        sleep(5)
         driver.find_element_by_xpath(
             "//li[contains(@class,'icon-delete')]//span[.='Delete This Instance and All Following']").click()
 
@@ -258,7 +258,7 @@ def show_menu(self, show_name, action):
             EC.presence_of_element_located((By.XPATH, "//span[@class='fc-event-title' and text()='%s']" % show_name )))
         ActionChains(driver).click(item).perform()
         header = driver.find_element_by_class_name("icon-edit").click()
-        sleep(2)
+        sleep(5)
         driver.find_element_by_xpath("//li[contains(@class,'icon-edit')]//span[.='Edit This Instance']").click()
     elif action == "already-deleted":
         try:
@@ -316,7 +316,7 @@ def check_users_info(self):
 def edit_meta_title(self, filename, stamp, creator, album):
     driver = self.driver
     library_menu(self, filename, "icon-edit")
-    sleep(2)
+    sleep(5)
     driver.find_element_by_name("track_title").clear()
     driver.find_element_by_name("track_title").send_keys(stamp)
     driver.find_element_by_name("artist_name").clear()
