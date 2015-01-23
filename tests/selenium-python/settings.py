@@ -43,8 +43,12 @@ TADMIN_EMAIL = "testadmin@email.com"
 #url of airtime and things that must be changed
 BASIC_URL = "link here"
 UPLOAD_MP3 = "/home/nareg/Music/recit.mp3"
-MP3_NAME = "recit"
 MP3_NAMEW = "recit.mp3"
+UPLOAD_WAV = ""
+WAV_NAMEW = ""
+UPLOAD_OGG = ""
+OGG_NAMEW = ""
+
 
 TIME_ZONE = "America/Toronto"
 

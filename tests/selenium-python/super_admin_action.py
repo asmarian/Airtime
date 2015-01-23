@@ -41,7 +41,7 @@ class TestSuperAdminActions(unittest.TestCase):
 
         cls.driver.quit()
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_currentUserPresent(self):
         driver = self.driver
         driver.find_element_by_class_name("name").click()
@@ -52,7 +52,7 @@ class TestSuperAdminActions(unittest.TestCase):
         # check for the rest of the info
 
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_add_media_present(self):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("ADD MEDIA")).click()
@@ -61,7 +61,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(tr_word("Add files to the upload queue and click the start button.") in source)
         self.assertTrue(tr_word("Drag files here.") in source)
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_library_present(self):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("LIBRARY")).click()
@@ -72,7 +72,7 @@ class TestSuperAdminActions(unittest.TestCase):
         # self.assertTrue(tr_word("Open Media Builder") in source)
         self.assertTrue(tr_word("Show / hide columns") in source)
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_calendar_present(self):
         driver = self.driver
         dates = month_name_year()
@@ -87,21 +87,21 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(
             driver.find_element_by_xpath("//span[@class='fc-button-content' and text()='%s']" % tr_word("day")))
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_dropsystem_present(self):
         driver = self.driver
         m1 = driver.find_element_by_link_text(tr_word("SYSTEM"))
         self.driver.implicitly_wait(10)
         self.assertEqual(m1.text, tr_word('SYSTEM'))
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_drophelp_present(self):
         driver = self.driver
         m1 = driver.find_element_by_link_text(tr_word("HISTORY"))
         sleep(5)
         self.assertEqual(m1.text, tr_word('HISTORY'))
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_playerNowPresent(self):
         driver = self.driver
         driver.find_element_by_link_text(tr_word("NOW PLAYING")).click()
@@ -109,7 +109,7 @@ class TestSuperAdminActions(unittest.TestCase):
         sleep(5)
         self.assertTrue(tr_word("Show / hide columns") in source)
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_addMP3_file(self):
         driver = self.driver
         driver.refresh()
@@ -124,12 +124,12 @@ class TestSuperAdminActions(unittest.TestCase):
         handle_alert(self)
 
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_startMP3_upload_delete(self):
         driver = self.driver
         driver.refresh()
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         upload_done = driver.find_element_by_class_name("plupload_done")
         driver.implicitly_wait(2)
         self.assertTrue(find_word(upload_done.text, MP3_NAMEW), "MP3 name not present")
@@ -141,13 +141,13 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(lib_content == False, "Track not deleted")
 
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_startMP3_upload_edit_title(self):
         driver = self.driver
         # driver.refresh()
         # find = library_content(self, MP3_NAMEW)
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         upload_done = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "plupload_done")))
         self.assertTrue(find_word(upload_done.text, MP3_NAMEW), "MP3 name not present")
         self.assertTrue(find_word(upload_done.text, "100"), "Percentage not 100")
@@ -162,7 +162,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertTrue(lib_content == False, "Track not deleted")
 
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_create_Admin_logout_login_delete(self):
         driver = self.driver
         driver.refresh()
@@ -199,7 +199,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(TADMIN_LOGIN)))
 
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_create_DJ_delete(self):
         driver = self.driver
         go_to_subfolder(self, "SYSTEM", "Users")
@@ -218,7 +218,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(DJ_LOGIN)))
 
 
-   # @unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_create_Guest_delete(self):
         driver = self.driver
         driver.refresh()
@@ -241,7 +241,7 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(GUEST_LOGIN)))
 
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_create_PR_delete(self):
         driver = self.driver
         driver.refresh()
@@ -264,12 +264,12 @@ class TestSuperAdminActions(unittest.TestCase):
         self.assertFalse(find_word(after_deletion.text, tr_word(PR_LOGIN)))
 
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_add_content_to_hour_show_delete_show(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         show_start, show_end = setup_time(HOUR_SHOW)
         create_show(self, stamped_show_name, show_start, show_end, "no_repeat", "no_link")
         go_to_folder(self, tr_word("LIBRARY"))
@@ -295,12 +295,12 @@ class TestSuperAdminActions(unittest.TestCase):
         lib_content = library_content(self, stamped_file_name)
         self.assertTrue(lib_content == False)
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_add_content_to_hour_linked_show_delete_show(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         show_start, show_end = setup_time(HOUR_SHOW)
         create_show(self, stamped_show_name, show_start, show_end, "repeat", "link")
         go_to_folder(self, tr_word("LIBRARY"))
@@ -330,7 +330,7 @@ class TestSuperAdminActions(unittest.TestCase):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         show_start, show_end = setup_time(SHOW_LENGTH)
         create_show(self, stamped_show_name, show_start, show_end, "no_repeat", "no_link")
         go_to_folder(self, tr_word("LIBRARY"))
@@ -355,12 +355,12 @@ class TestSuperAdminActions(unittest.TestCase):
         lib_content = library_content(self, stamped_file_name)
         self.assertTrue(lib_content == False)
 
-    #@unittest.skip("skip this one")
+    @unittest.skip("skip this one")
     def test_create_linked_show_check_number_of_ads_in_instance(self):
         driver = self.driver
         stamped_show_name = time_stamper() + SHOW_NAME
         go_to_folder(self, tr_word("ADD MEDIA"))
-        upload_file(self, UPLOAD_MP3, MP3_NAME)
+        upload_file(self, UPLOAD_MP3, MP3_NAMEW)
         show_start, show_end = setup_time(HOUR_SHOW)
         create_show(self, stamped_show_name, show_start, show_end, "repeat", "link")
         go_to_folder(self, tr_word("LIBRARY"))
